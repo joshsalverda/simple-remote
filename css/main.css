@@ -1,0 +1,87 @@
+html,
+body {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
+
+button {
+  background: transparent;
+  color: #fff;
+  box-sizing: border-box;
+  border: 1px solid #fff;
+}
+
+button:active {
+  background: #fff;
+  color: #000;
+}
+
+#simple-remote {
+  /*display: table;*/
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.swipe-area,
+.player-controls {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 18%;
+}
+
+#simple-remote.playing .swipe-area {
+  display: none;
+}
+
+.player-controls {
+  display: none;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.player-controls > :first-child {
+  display: none;
+}
+
+#simple-remote.playing .player-controls {
+  display: block;
+  font-size: 70px;
+}
+
+.player-controls .play-pause {
+  display: block;
+}
+
+.player-controls .skip-back,
+.player-controls .stop,
+.player-controls .skip-forward {
+  display: inline-block;
+}
+
+
+
+.player-controls button {
+  border: 0;
+}
+
+.footer-nav {
+  position: absolute;
+  top: 82%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  font-size: 0;
+}
+
+.footer-nav .back,
+.footer-nav .home {
+    display: inline-block;
+    width: 50%;
+    height: 100%;
+    font-size: 50px;
+}

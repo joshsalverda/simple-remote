@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Kodi - Simple Remote</title>
+    <meta name="description" content="A simpler remote for controlling Kodi">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <link rel="stylesheet" href="css/normalize.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/main.css">
+  </head>
+  <body>
+    <div id="simple-remote">
+      <div class="swipe-area"></div>
+
+      <div id="player-controls" class="player-controls">
+          <div class="control">
+            <h2 class="title"></h2>
+            <div class="play-pause">
+              <button type="button" class="fa fa-pause"></button>
+            </div>
+            <div class="skip-back">
+              <button type="button" class="fa fa-step-backward"></button>
+            </div>
+            <div class="stop">
+              <button type="button" class="fa fa-stop"></button>
+            </div>
+            <div class="skip-forward">
+              <button type="button" class="fa fa-step-forward"></button>
+            </div>
+          </div>
+      </div>
+
+      <div class="footer-nav">
+          <button type="button" class="back fa fa-arrow-left"></button>
+          <button type="button" class="home fa fa-home"></button>
+      </div>
+    </div>
+
+    <script src="js/vendor/hammer.min.js"></script>
+
+    <script src="js/simple-remote.js"></script>
+    <script src="js/simple-remote-players.js"></script>
+    <script src="js/simple-remote-hammer.js"></script>
+    <script src="js/simple-remote-socket.js"></script>
+
+    <script>
+      SimpleRemote.init();
+    </script>
+  </body>
+</html>
