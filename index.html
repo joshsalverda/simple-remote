@@ -4,50 +4,62 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Kodi - Simple Remote</title>
-    <meta name="description" content="A simpler remote for controlling Kodi">
+    <meta name="description" content="A simple web-based gesture remote for Kodi">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
-    <link rel="stylesheet" href="css/normalize.min.css">
-    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/main.css">
   </head>
   <body>
     <div id="simple-remote">
       <div class="swipe-area"></div>
 
-      <div id="player-controls" class="player-controls">
-          <div class="control">
-            <h2 class="title"></h2>
-            <div class="play-pause">
-              <button type="button" class="fa fa-pause"></button>
-            </div>
-            <div class="skip-back">
-              <button type="button" class="fa fa-step-backward"></button>
-            </div>
-            <div class="stop">
-              <button type="button" class="fa fa-stop"></button>
-            </div>
-            <div class="skip-forward">
-              <button type="button" class="fa fa-step-forward"></button>
-            </div>
+      <button class="help">Help</button>
+
+      <div class="action-hints-wrap">
+        <div class="action-hints">
+          <div class="tap gesture">
+            Tap to select things and to pause/play media.
           </div>
+
+          <div class="press gesture">
+            Press for half a second to bring up the context menu and to stop when playing media.
+          </div>
+
+          <div class="swipe gesture">
+            Swipe up/down/left/right to navigate. When playing media swipe left/right to skip back/forward, respectively.
+          </div>
+
+          <div class="pan gesture">
+            Pan up/down and hold to quickly scroll through long lists. Pan left/right and hold to speed through media.
+          </div>
+
+          <div class="pinch-out gesture">
+            Pinch out to go back in the GUI. I know this is awkward, it may change.
+          </div>
+
+          <div>
+            <p>When input is requested the device keyboard should show up automatically, except on iPhone.</p>
+            <p>iPhone users will need to tap on the screen once to have the keyboard display. This is due to a technical limitation.</p>
+          </div>
+        </div>
       </div>
 
-      <div class="footer-nav">
-          <button type="button" class="back fa fa-arrow-left"></button>
-          <button type="button" class="home fa fa-home"></button>
-      </div>
+      <input id="keyboard-input">
     </div>
 
     <script src="js/vendor/hammer.min.js"></script>
+    <script src="js/vendor/prevent-ghosts.js"></script>
 
     <script src="js/simple-remote.js"></script>
     <script src="js/simple-remote-players.js"></script>
     <script src="js/simple-remote-hammer.js"></script>
     <script src="js/simple-remote-socket.js"></script>
+    <script src="js/simple-remote-input.js"></script>
+    <script src="js/simple-remote-help.js"></script>
 
     <script>
       SimpleRemote.init();
+      SimpleRemote.help.init();
     </script>
   </body>
 </html>

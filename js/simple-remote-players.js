@@ -1,74 +1,70 @@
-(function () {
+(function (context) {
   'use strict';
 
-  window.SimpleRemote = window.SimpleRemote || {};
-  window.SimpleRemote.players = {};
+  if(!context.SimpleRemote) {
+    context.SimpleRemote = {};
+  }
 
-  window.SimpleRemote.player = function (playerid) {
+  var SimpleRemote = context.SimpleRemote;
+  SimpleRemote.players = SimpleRemote.players || {};
+
+  SimpleRemote.Player = function (playerid) {
     var self = this,
-        playPause,
-        stop,
-        forward,
-        backward,
-        init,
-        destroy;
+        Property = function () {
+          var _property = null;
+
+          return function (value) {
+            if(value != null) {
+              _property = value;
+            } else {
+              return _property;
+            }
+          }
+        };
+
+    self.type = new Property();
+    self.speed = new Property();
 
     self.playing = function () {
-      self.playPauseElement.classList.remove('fa-play');
-      self.playPauseElement.classList.add('fa-pause');
-      SimpleRemote.simpleRemoteElement.classList.add('playing');
+      return self.speed() !== 0;
     };
 
     self.paused = function () {
-      self.playPauseElement.classList.remove('fa-pause');
-      self.playPauseElement.classList.add('fa-play');
-      SimpleRemote.simpleRemoteElement.classList.add('playing');
+      return self.speed() === 0;
     };
 
-    self.stopped = function () {
-      SimpleRemote.simpleRemoteElement.classList.remove('playing');
+    self.update = function (data) {
+      self.type(data.type);
+      self.speed(data.speed);
     };
 
-    playPause = function () {
-      SimpleRemote.socket.send('Player.PlayPause', 0, { playerid: playerid });
+    self.playPause = function () {
+      SimpleRemote.socket.send('Player.PlayPause', playerid, { playerid: playerid });
     };
 
-    stop = function () {
-      self.stopped();
-      SimpleRemote.socket.send('Player.Stop', 0, { playerid: playerid });
+    self.stop = function () {
+      SimpleRemote.socket.send('Player.Stop', playerid, { playerid: playerid });
     };
 
-    forward = function () {
-      SimpleRemote.socket.send('Player.Seek', 0, { playerid: playerid, value: 'smallforward' });
+    self.smallforward = function () {
+      SimpleRemote.socket.send('Player.Seek', playerid, { playerid: playerid, value: 'smallforward' });
     };
 
-    backward = function () {
-      SimpleRemote.socket.send('Player.Seek', 0, { playerid: playerid, value: 'smallbackward' });
+    self.setSpeed = function (speed) {
+      SimpleRemote.socket.send('Player.SetSpeed', playerid, { playerid: playerid, speed: speed });
+      SimpleRemote.socket.send('Player.GetActivePlayers', 'getActivePlayers');
     };
 
-    init = function () {
-      var playerControls = document.querySelector('.player-controls'),
-          controlTemplate = playerControls.querySelector('.control'),
-          controls = controlTemplate.cloneNode(true);
-
-      playerControls.appendChild(controls);
-
-      self.heading = controls.querySelector('h2');
-      self.playPauseElement = controls.querySelector('.play-pause button');
-      self.stopElement = controls.querySelector('.stop button');
-      self.forwardElement = controls.querySelector('.skip-forward button');
-      self.backElement = controls.querySelector('.skip-back button');
-
-      self.playPauseElement.addEventListener('click', playPause);
-      self.stopElement.addEventListener('click', stop);
-      self.forwardElement.addEventListener('click', forward);
-      self.backElement.addEventListener('click', backward);
+    self.incrementSpeed = function () {
+      self.setSpeed('increment');
     };
 
-    destroy = function () {
-
+    self.smallbackward = function () {
+      SimpleRemote.socket.send('Player.Seek', playerid, { playerid: playerid, value: 'smallbackward' });
     };
 
-    init();
+    self.decrementSpeed = function () {
+      self.setSpeed('decrement');
+    };
   };
-}());
+}(this));

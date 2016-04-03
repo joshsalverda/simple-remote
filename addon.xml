@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
-  id="210"
-  version="RELEASE 1"
-  name="XBMC SIMPLE WEB INTERFACE"
-  provider-name="XMBC_FREAK">
-  <requires>
-    <import addon="xbmc.gui" version="RELEASE 1"/>
-  </requires>
-  <extension
-    point="xbmc.gui.webinterface"/>
+  id="webinterface.simple-remote"
+  name="Simple Remote"
+  version="0.1"
+  provider-name="Josh Salverda">
+  <extension point="xbmc.webinterface"/>
   <extension point="xbmc.addon.metadata">
-    <summary lang="en">XMBC Web Interface.</summary>
-    <description lang="en">Web interface;800x600 Tablets</description>
+    <summary lang="en_gb">A simple web-based gesture remote for Kodi</summary>
+    <description lang="en_gb">A simple web-based gesture remote for Kodi</description>
+    <disclaimer lang="en_gb">Only tested on iOS 9 and Blackberry 10 so far</disclaimer>
+    <language>en</language>
     <platform>all</platform>
+    <license>MIT License</license>
+    <email>josh.salverda@gmail.com</email>
+    <source>https://github.com/joshsalverda/simple-remote</source>
   </extension>
 </addon>

@@ -3,85 +3,159 @@ body {
   overflow: hidden;
   width: 100%;
   height: 100%;
-  background: #000;
-}
-
-button {
-  background: transparent;
+  background: #3B548F;
   color: #fff;
-  box-sizing: border-box;
-  border: 1px solid #fff;
+  margin: 0;
+  font-family: sans-serif;
 }
 
-button:active {
-  background: #fff;
-  color: #000;
+* {
+  -webkit-backface-visibility: hidden;
 }
 
 #simple-remote {
-  /*display: table;*/
   position: relative;
   width: 100%;
   height: 100%;
 }
 
-.swipe-area,
-.player-controls {
+.swipe-area {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 18%;
+  bottom: 0;
 }
 
-#simple-remote.playing .swipe-area {
-  display: none;
+#keyboard-input {
+  position: absolute;
+  top: -100px;
+  left: 0;
 }
 
-.player-controls {
+.help {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  background: url(../images/help.png) center no-repeat;
+  background-size: 20px;
+  border: 0;
+  width: 25px;
+  height: 25px;
+  text-indent: 100%;
+  padding: 0;
+}
+
+.action-hints-wrap {
   display: none;
+  height: 100%;
+  width: 100%;
   text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.action-hints-wrap.show {
+  display: table;
+}
+
+.action-hints {
+  display: table-cell;
   vertical-align: middle;
 }
 
-.player-controls > :first-child {
+.action-hints > * {
   display: none;
+  position: relative;
+  padding: 0 10px;
 }
 
-#simple-remote.playing .player-controls {
-  display: block;
-  font-size: 70px;
+.action-hints .gesture {
+  padding-top: 40px;
 }
 
-.player-controls .play-pause {
-  display: block;
-}
-
-.player-controls .skip-back,
-.player-controls .stop,
-.player-controls .skip-forward {
+.action-hints > .show {
   display: inline-block;
 }
 
-
-
-.player-controls button {
-  border: 0;
-}
-
-.footer-nav {
+.action-hints .gesture::before,
+.action-hints .gesture::after {
+  content: '';
   position: absolute;
-  top: 82%;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  font-size: 0;
+  width: 30px;
+  height: 30px;
+  top: 0;
+  left: 50%;
+  margin-left: -15px;
+  border-radius: 50%;
+
+  -webkit-animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
+
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
 }
 
-.footer-nav .back,
-.footer-nav .home {
-    display: inline-block;
-    width: 50%;
-    height: 100%;
-    font-size: 50px;
+.action-hints .gesture::after {
+  background: #fff;
+}
+
+.action-hints .tap::before {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+
+  -webkit-animation-name: tap;
+  animation-name: tap;
+}
+
+.action-hints .press::before {
+  -webkit-animation-duration: 3s;
+  animation-duration: 3s;
+
+  -webkit-animation-name: press;
+  animation-name: press;
+}
+
+.action-hints .swipe,
+.action-hints .pan {
+  padding-top: 110px;
+}
+
+.action-hints .swipe::after {
+  -webkit-animation-duration: 2s;
+  animation-duration: 2s;
+
+  -webkit-animation-name: swipe;
+  animation-name: swipe;
+}
+
+.action-hints .pan::after {
+  -webkit-animation-duration: 5s;
+  animation-duration: 5s;
+
+  -webkit-animation-name: pan;
+  animation-name: pan;
+}
+
+.action-hints .pinch-out {
+  padding-top: 70px;
+}
+
+.action-hints .pinch-out::before,
+.action-hints .pinch-out::after {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+}
+
+.action-hints .pinch-out::before {
+  background: #fff;
+
+  -webkit-animation-name: pinch-out-top;
+  animation-name: pinch-out-top;
+}
+
+.action-hints .pinch-out::after {
+  -webkit-animation-name: pinch-out-bottom;
+  animation-name: pinch-out-bottom;
 }

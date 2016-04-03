@@ -1,78 +1,71 @@
-(function () {
-    'use strict';
+(function (context) {
+  'use strict';
 
-    window.SimpleRemote = {
-      opened: function () {
-        this.hammer.init(document.querySelector('.swipe-area'));
-        this.socket.send('Player.GetActivePlayers', 'getActivePlayers');
-      },
-      received: function (data) {
-        var data = JSON.parse(event.data),
-            playerid;
+  context.SimpleRemote = {
+    opened: function () {
+      this.hammer.init(document.querySelector('.swipe-area'));
+      this.socket.send('Player.GetActivePlayers', 'getActivePlayers');
+    },
+    activePlayer: null,
+    getActivePlayer: function () {
+      return this.players[this.activePlayer];
+    },
+    received: function (data) {
+      var data = JSON.parse(event.data),
+          players,
+          playerid,
+          playerCount;
 
-        if(data) {
-          if(data.result) {
-            if(data.id === 'getActivePlayers' && data.result.length) {
-              playerid = data.result[0].playerid;
-              SimpleRemote.players[playerid] = new SimpleRemote.player(playerid);
-              SimpleRemote.socket.send('Player.GetProperties', playerid, { playerid: playerid, properties: ['speed'] });
-            }
-
-            if(data.result && data.result.speed !== undefined && SimpleRemote.players[data.id]) {
-              if(data.result.speed === 0) {
-                SimpleRemote.players[data.id].paused();
-              } else {
-                SimpleRemote.players[data.id].playing();
-              }
+      if(data) {
+        if(data.result) {
+          if(data.id === 'getActivePlayers' && data.result.length) {
+            SimpleRemote.activePlayer = data.result[0].playerid;
+            players = data.result;
+            for(playerCount = 0; playerCount < players.length; playerCount++) {
+              playerid = players[playerCount].playerid;
+              SimpleRemote.players[playerid] = new SimpleRemote.Player(playerid);
+              SimpleRemote.socket.send('Player.GetProperties', playerid, { playerid: playerid, properties: ['speed', 'type'] });
             }
           }
 
-          if(data.method) {
-            switch(data.method) {
-              case 'Player.OnPlay':
-                SimpleRemote.players[data.params.data.player.playerid].playing();
-              break;
-
-              case 'Player.OnPause':
-                SimpleRemote.players[data.params.data.player.playerid].paused();
-              break;
-            }
+          if(data.result && data.result.speed != null && SimpleRemote.players[data.id]) {
+            SimpleRemote.players[data.id].update(data.result);
           }
         }
-      },
-      closed: function () {
-        this.hammer.destroy();
 
-        //document.body.removeEventListener('click', bodyClick);
-        backButton.removeEventListener('click', backClick);
-        homeButton.removeEventListener('click', homeClick);
+        if(data.method) {
+          switch(data.method) {
+            case 'Player.OnStop':
+              SimpleRemote.players = {};
+              SimpleRemote.activePlayer = null;
+            case 'Player.OnPlay':
+            case 'Player.OnPause':
+              this.socket.send('Player.GetActivePlayers', 'getActivePlayers');
+            break;
 
-        // If socket is closed, attempt to reconnect
-        setTimeout(SimpleRemote.init, 5000);
-      },
-      /*bind: function () {
+            case 'Input.OnInputRequested':
+              this.input.init();
+            break;
 
-      },*/
-      onBack: function () {
-        this.socket.send('Input.Back');
-      },
-      onHome: function () {
-        this.socket.send('Input.Home');
-      },
-      init: function () {
-        var backButton = document.querySelector('.back'),
-            homeButton = document.querySelector('.home');
-
-        this.simpleRemoteElement = document.getElementById('simple-remote');
-        this.socket.open('ws://192.168.1.111:9090/jsonrpc', this.opened.bind(this), this.received.bind(this), this.closed.bind(this));
-
-        //SimpleRemote..player.init();
-
-        backButton.addEventListener('click', this.onBack.bind(this));
-        homeButton.addEventListener('click', this.onHome.bind(this));
-      },
-      destroy: function () {
-
+            case 'Input.OnInputFinished':
+              this.input.destroy();
+            break;
+          }
+        }
       }
-    };
-}());
+    },
+    closed: function (destroy) {
+      // If socket is closed, attempt to reconnect
+      setTimeout(SimpleRemote.init.bind(this), 5000);
+    },
+    init: function () {
+      this.simpleRemoteElement = document.getElementById('simple-remote');
+      preventGhosts(this.simpleRemoteElement);
+      this.socket.open('ws://' + window.location.hostname + ':9090/jsonrpc', this.opened.bind(this), this.received.bind(this), this.closed.bind(this));
+    },
+    destroy: function () {
+      this.hammer.destroy();
+      this.socket.destroy();
+    }
+  };
+}(this));

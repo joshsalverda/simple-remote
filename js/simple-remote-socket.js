@@ -1,9 +1,13 @@
-(function () {
+(function (context) {
   'use strict';
 
-  window.SimpleRemote = window.SimpleRemote || {};
+  if(!context.SimpleRemote) {
+    context.SimpleRemote = {};
+  }
 
-  window.SimpleRemote.socket = {
+  var SimpleRemote = context.SimpleRemote;
+
+  SimpleRemote.socket = {
     open: function (endpoint, opened, received, closed) {
       this.socket = new WebSocket(endpoint);
       this.socket.onopen = opened;
@@ -22,6 +26,12 @@
       }
 
       this.socket.send(JSON.stringify(message));
+    },
+    destroy: function () {
+      this.socket.onopen = null;
+      this.socket.onmessage = null;
+      this.socket.onclose = null;
+      this.socket.close();
     }
   };
-}());
+}(this));
